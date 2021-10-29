@@ -32,7 +32,7 @@ if __name__ == '__main__':
     cfg.DATALOADER.NUM_WORKERS = 1
     cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
     cfg.SOLVER.IMS_PER_BATCH = 1
-    # cfg.SOLVER.BASE_LR = 0.00025
+    cfg.SOLVER.BASE_LR = 0.00005
     # cfg.SOLVER.MAX_ITER = 300
     # cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512
     # cfg.MODEL.ROI_HEADS.NUM_CLASSES = 5
