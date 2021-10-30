@@ -5,10 +5,27 @@ from detectron2.data import MetadataCatalog, DatasetCatalog
 from detectron2.data.datasets import register_coco_instances
 from detectron2.engine import DefaultTrainer, DefaultPredictor
 from detectron2.config import get_cfg
+from detectron2.modeling import BACKBONE_REGISTRY, Backbone, ShapeSpec
 import os
 
 from detectron2.model_zoo import model_zoo
 from detectron2.utils.visualizer import Visualizer
+
+import torch.nn as nn
+
+
+@BACKBONE_REGISTRY.register()
+class ToyBackBone(Backbone):
+    def __init__(self, cfg, input_shape):
+        super().__init__()
+        # create your own backbone
+        self.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1)
+
+    def forward(self, image):
+        return {"conv1": self.conv1(image)}
+
+    def output_shape(self):
+        return {"conv1": ShapeSpec(channels=64, stride=1)}
 
 
 if __name__ == '__main__':
@@ -44,7 +61,7 @@ if __name__ == '__main__':
 
     cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "model_final.pth")
     cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5
-    cfg.DATASETS.TEST = ("my_dataset_val", )
+    cfg.DATASETS.TEST = ("my_dataset_val",)
     predictor = DefaultPredictor(cfg)
 
     im = cv2.imread("D:/projects_python/_datasets/coco_2017/train2017/000000000036.jpg")
